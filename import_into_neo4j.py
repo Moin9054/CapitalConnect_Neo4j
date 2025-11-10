@@ -63,7 +63,6 @@ def import_data_and_create_routes(uri, user, password, csv_path, distance_thresh
                     "region": row['region']
                 })
                 if len(batch) >= BATCH_SIZE:
-                    # use execute_write for neo4j python driver v5+
                     session.execute_write(upsert_batch, batch)
                     batch = []
             if batch:
@@ -92,13 +91,11 @@ def import_data_and_create_routes(uri, user, password, csv_path, distance_thresh
         session.run(create_routes_cypher)
         print("ROUTE relationships created.")
 
-        # Attempt to drop previous projection (safe)
         try:
             session.run("CALL gds.graph.drop('routesGraph') YIELD graphName")
         except Exception:
             pass
 
-        # Try to create GDS projection — wrapped so script won't crash if GDS isn't available
         try:
             session.run("""
             CALL gds.graph.project(

@@ -43,7 +43,7 @@ def extract_country_capital(item, region_label):
     latlon = cap_info.get('latlng')
 
     if not latlon:
-        latlon = item.get('latlng')  # fallback to country centroid
+        latlon = item.get('latlng')
 
     if isinstance(latlon, list) and len(latlon) >= 2:
         lat, lon = float(latlon[0]), float(latlon[1])
@@ -77,11 +77,9 @@ def write_csv(rows, filename):
 
 
 def main():
-    # fetch sets
     europe = fetch_region("europe")
     se_asia = fetch_subregion("South-Eastern Asia")
-    south_asia = fetch_subregion("Southern Asia")   # includes India
-
+    south_asia = fetch_subregion("Southern Asia")  
     rows = []
     seen = set()
 
